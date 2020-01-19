@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) Philippe Meyer 2019
 Distributed under the MIT License
 vanillaSelectBox : v0.30 : The menu stops moving around on window resize and scroll + z-index in order of creation for multiple instances
@@ -90,7 +90,7 @@ function vanillaSelectBox(domSelector, options) {
 
 		let btnTag = self.userOptions.stayOpen ? "div" : "button";
         this.button = document.createElement(btnTag);
-		
+
         let presentValue = this.main.value;
         this.main.appendChild(this.button);
         this.title = document.createElement("span");
@@ -122,7 +122,7 @@ function vanillaSelectBox(domSelector, options) {
             window.addEventListener("resize", function (e) {
                 self.repositionMenu();
             });
-    
+
             window.addEventListener("scroll", function (e) {
                 self.repositionMenu();
             });
@@ -133,11 +133,15 @@ function vanillaSelectBox(domSelector, options) {
         this.ul.style.minHeight = this.ulminHeight + "px";
         if (this.isMultiple) {
             this.ul.classList.add("multi");
+            let selectAll = document.createElement("option");
+            selectAll.setAttribute("value", 'all');
+            selectAll.innerText = 'Select All';
+            this.root.prepend(selectAll)
         }
         let selectedTexts = ""
         let sep = "";
         let nrActives = 0;
-		
+
         if (this.search) {
             this.searchZone = document.createElement("div");
             this.ul.appendChild(this.searchZone);
@@ -163,7 +167,7 @@ function vanillaSelectBox(domSelector, options) {
             let text = x.textContent;
             let value = x.value;
             let classes = x.getAttribute("class");
-			if(classes) 
+			if(classes)
 				{
 					classes=classes.split(" ");
 				}
@@ -180,7 +184,7 @@ function vanillaSelectBox(domSelector, options) {
 				classes.forEach(function(x){
 					li.classList.add(x);
 				});
-                
+
             }
             if (isSelected) {
                 nrActives++;
@@ -231,9 +235,9 @@ function vanillaSelectBox(domSelector, options) {
                 }
             });
         }
-		
+
 		if(self.userOptions.stayOpen){
-            self.drop.style.display = "block";	
+            self.drop.style.display = "block";
 			self.drop.style.boxShadow = "none";
 			self.drop.style.minHeight =  (this.userOptions.maxHeight+10) + "px";
 			self.drop.style.position = "relative";
@@ -264,6 +268,29 @@ function vanillaSelectBox(domSelector, options) {
             let choiceValue = e.target.getAttribute("data-value");
             let choiceText = e.target.getAttribute("data-text");
             let className = e.target.getAttribute("class");
+
+            if (choiceValue === 'all') {
+                if (e.target.hasAttribute('data-selected')
+                  && e.target.getAttribute('data-selected') === 'true') {
+                    self.setValue([])
+                    e.target.innerText = 'Select All'
+                    e.target.setAttribute('data-selected', 'false')
+                } else {
+                    let allValues = []
+                    e.target.innerText = 'Clear All'
+                    Array.prototype.slice.call(self.listElements).forEach(function (x) {
+                        if (x.hasAttribute('data-value')
+                          && x.getAttribute('data-value') !== 'all') {
+                            allValues.push(x.getAttribute('data-value'))
+                        }
+                    });
+                    e.target.setAttribute('data-selected', 'true')
+                    self.setValue(allValues)
+                    e.target.classList.add("active");
+                }
+                return;
+            }
+
             if (!self.isMultiple) {
                 self.root.value = choiceValue;
                 self.title.textContent = choiceText;
@@ -442,7 +469,7 @@ function vanillaSelectBox(domSelector, options) {
         let event = document.createEvent('HTMLEvents');
         event.initEvent('change', true, false);
         this.root.dispatchEvent(event);
-    
+
 	}
 
 	vanillaSelectBox.prototype.empty = function () {
@@ -458,7 +485,7 @@ function vanillaSelectBox(domSelector, options) {
         }
         this.privateSendChange();
     }
-	
+
     vanillaSelectBox.prototype.destroy = function () {
         let already = document.getElementById("btn-group-" + this.domSelector);
         if (already) {
