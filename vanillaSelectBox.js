@@ -246,6 +246,8 @@ function vanillaSelectBox(domSelector, options) {
 			self.button.style.border = "none";
 		}else{
 			this.main.addEventListener("click", function (e) {
+			  // avoid wrong event trigger until we found a better solution
+        if (e.screenX === 0) return;
 				if (self.isDisabled) return;
                     self.drop.style.left = self.left + "px";
                     self.drop.style.top = self.top + "px";
