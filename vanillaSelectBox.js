@@ -221,15 +221,15 @@ function vanillaSelectBox(domSelector, options) {
                 let searchValueLength = searchValue.length;
                 if (searchValueLength < 2) {
                     Array.prototype.slice.call(self.listElements).forEach(function (x) {
-                        x.classList.remove("hide");
+                        x.classList.remove("hidden-search");
                     });
                 } else {
                     Array.prototype.slice.call(self.listElements).forEach(function (x) {
                         let text = x.getAttribute("data-text").toUpperCase();
                         if (text.indexOf(searchValue) == -1) {
-                            x.classList.add("hide");
+                            x.classList.add("hidden-search");
                         } else {
-                            x.classList.remove("hide");
+                            x.classList.remove("hidden-search");
                         }
                     });
                 }
@@ -360,7 +360,7 @@ function vanillaSelectBox(domSelector, options) {
 			if(self.search){
 				self.inputBox.value = "";
 				Array.prototype.slice.call(self.listElements).forEach(function (x) {
-                   x.classList.remove("hide");
+                   x.classList.remove("hidden-search");
                 });
 			}
         }
