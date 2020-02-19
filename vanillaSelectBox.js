@@ -226,7 +226,9 @@ function vanillaSelectBox(domSelector, options) {
                 } else {
                     Array.prototype.slice.call(self.listElements).forEach(function (x) {
                         let text = x.getAttribute("data-text").toUpperCase();
-                        if (text.indexOf(searchValue) == -1) {
+                        if (text.indexOf(searchValue) == -1
+                          && x.getAttribute('data-value') !== 'all'
+                        ) {
                             x.classList.add("hidden-search");
                         } else {
                             x.classList.remove("hidden-search");
@@ -282,7 +284,8 @@ function vanillaSelectBox(domSelector, options) {
                     e.target.innerText = 'Clear All'
                     Array.prototype.slice.call(self.listElements).forEach(function (x) {
                         if (x.hasAttribute('data-value')
-                          && x.getAttribute('data-value') !== 'all') {
+                          && x.getAttribute('data-value') !== 'all'
+                          && !x.classList.contains('hidden-search')) {
                             allValues.push(x.getAttribute('data-value'))
                         }
                     });
