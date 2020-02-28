@@ -136,7 +136,9 @@ function vanillaSelectBox(domSelector, options) {
             let selectAll = document.createElement("option");
             selectAll.setAttribute("value", 'all');
             selectAll.innerText = 'Select All';
-            this.root.prepend(selectAll)
+            this.root.insertBefore(selectAll,(this.root.hasChildNodes())
+              ? this.root.childNodes[0]
+              : null);
         }
         let selectedTexts = ""
         let sep = "";

@@ -155,8 +155,8 @@
 	  display: inline-block;
 	  transform: rotate(45deg);
 	  margin-top:2px;
-	  height: 8px;
-	  width:  4px;
+	  height: 10px;
+	  width:  6px;
 	  border-bottom: 3px solid black;
 	  border-right:  3px solid black;
 }
