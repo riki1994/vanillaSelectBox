@@ -44,7 +44,8 @@ function vanillaSelectBox(domSelector, options) {
         translations: { "all": "All", "items": "items" },
         search: false,
         placeHolder: "",
-		stayOpen:false
+		    stayOpen:false,
+        disableSelectAll: false,
     }
     if (options) {
         if (options.maxWidth != undefined) {
@@ -62,8 +63,11 @@ function vanillaSelectBox(domSelector, options) {
         if (options.search != undefined) {
             this.search = options.search;
         }
-		if (options.stayOpen != undefined) {
+		    if (options.stayOpen != undefined) {
             this.userOptions.stayOpen = options.stayOpen;
+        }
+        if (options.disableSelectAll != undefined) {
+            this.userOptions.disableSelectAll = options.disableSelectAll;
         }
     }
     this.repositionMenu = function(){
@@ -133,12 +137,14 @@ function vanillaSelectBox(domSelector, options) {
         this.ul.style.minHeight = this.ulminHeight + "px";
         if (this.isMultiple) {
             this.ul.classList.add("multi");
-            let selectAll = document.createElement("option");
-            selectAll.setAttribute("value", 'all');
-            selectAll.innerText = 'Select All';
-            this.root.insertBefore(selectAll,(this.root.hasChildNodes())
-              ? this.root.childNodes[0]
-              : null);
+            if (!self.userOptions.disableSelectAll) {
+                let selectAll = document.createElement("option");
+                selectAll.setAttribute("value", 'all');
+                selectAll.innerText = 'Select All';
+                this.root.insertBefore(selectAll,(this.root.hasChildNodes())
+                  ? this.root.childNodes[0]
+                  : null);
+            }
         }
         let selectedTexts = ""
         let sep = "";
