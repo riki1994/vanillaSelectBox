@@ -245,6 +245,7 @@ function vanillaSelectBox(domSelector, options) {
 
         if (document.querySelector(this.domSelector + ' optgroup') !== null) {
             this.options = document.querySelectorAll(this.domSelector + " option");
+            this.optionNodesByGroup = [];
             let groups = document.querySelectorAll(this.domSelector + ' optgroup');
             Array.prototype.slice.call(groups).forEach(function(group) {
                 let groupOptions = group.querySelectorAll('option');
@@ -252,17 +253,19 @@ function vanillaSelectBox(domSelector, options) {
                 li.classList.add('grouped-option');
                 li.appendChild(document.createTextNode(group.label));
                 self.ul.appendChild(li);
+                let childrenOptions = [];
+                self.optionNodesByGroup.push({
+                    groupNameLi: li,
+                    options: childrenOptions
+                });
 
                 Array.prototype.slice.call(groupOptions).forEach(function(x) {
                     let text = x.textContent;
                     let value = x.value;
                     let classes = x.getAttribute("class");
-                    if(classes)
-                    {
+                    if (classes) {
                         classes=classes.split(" ");
-                    }
-                    else
-                    {
+                    } else {
                         classes=[];
                     }
                     let li = document.createElement("li");
@@ -274,7 +277,6 @@ function vanillaSelectBox(domSelector, options) {
                         classes.forEach(function(x){
                             li.classList.add(x);
                         });
-
                     }
                     if (isSelected) {
                         nrActives++;
@@ -291,6 +293,7 @@ function vanillaSelectBox(domSelector, options) {
                         }
                     }
                     li.appendChild(document.createTextNode(text));
+                    childrenOptions.push(li);
                 })
             })
         }
@@ -327,6 +330,23 @@ function vanillaSelectBox(domSelector, options) {
                             x.classList.remove("hidden-search");
                         }
                     });
+                }
+                if (self.optionNodesByGroup) {
+                    self.optionNodesByGroup.forEach(function (optGroup) {
+                        let hideOptGroup = true;
+                        let lis = optGroup.options;
+                        for (let i = 0; i < lis.length && hideOptGroup; i++) {
+                            if (!lis[i].classList.contains("hidden-search")) {
+                                hideOptGroup = false;
+                            }
+                        }
+                        let groupNameLi = optGroup.groupNameLi;
+                        if (hideOptGroup) {
+                            groupNameLi.classList.add("hidden-search");
+                        } else {
+                            groupNameLi.classList.remove("hidden-search");
+                        }
+                    })
                 }
             });
         }
