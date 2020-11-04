@@ -311,6 +311,9 @@ function vanillaSelectBox(domSelector, options) {
             self.title.textContent = self.userOptions.placeHolder;
         }
         this.listElements = this.drop.querySelectorAll('li:not(.grouped-option)');
+        if (self.optionNodesByGroup) {
+            self.listGroups = this.drop.querySelectorAll('li.grouped-option');
+        }
         if (self.search) {
             self.inputBox.addEventListener('keyup', function (e) {
                 let searchValue = e.target.value.toUpperCase();
@@ -319,6 +322,11 @@ function vanillaSelectBox(domSelector, options) {
                     Array.prototype.slice.call(self.listElements).forEach(function (x) {
                         x.classList.remove('hidden-search');
                     });
+                    if (self.listGroups) {
+                        Array.prototype.slice.call(self.listGroups).forEach(function (x) {
+                            x.classList.remove('hidden-search');
+                        });
+                    }
                 } else {
                     Array.prototype.slice.call(self.listElements).forEach(function (x) {
                         let text = x.getAttribute('data-text').toUpperCase();
@@ -477,11 +485,16 @@ function vanillaSelectBox(domSelector, options) {
         function docListener() {
             document.removeEventListener('click', docListener);
             self.drop.style.display = 'none';
-            if(self.search){
+            if (self.search){
                 self.inputBox.value = '';
                 Array.prototype.slice.call(self.listElements).forEach(function (x) {
                     x.classList.remove('hidden-search');
                 });
+                if (self.listGroups) {
+                    Array.prototype.slice.call(self.listGroups).forEach(function (x) {
+                        x.classList.remove('hidden-search');
+                    });
+                }
             }
         }
     }
