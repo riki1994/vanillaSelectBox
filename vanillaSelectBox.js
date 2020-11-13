@@ -1,6 +1,6 @@
 /*
 Copyright (C) Philippe Meyer 2019-2020
-Distributed under the MIT License  
+Distributed under the MIT License
 
 vanillaSelectBox : v0.54 : if all the options of the select are selected by the user then the check all checkbox is checked
 vanillaSelectBox : v0.53 : if all the options of the select are selected then the check all checkbox is checked
@@ -133,7 +133,7 @@ function vanillaSelectBox(domSelector, options) {
             this.main.style.minHeight =  (this.userOptions.maxHeight+10) + "px";
         }
 
-        let btnTag = self.userOptions.stayOpen ? "div" : "button";
+        let btnTag = self.userOptions.stayOpen ? "div" : "a";
         this.button = document.createElement(btnTag);
 
         this.main.appendChild(this.button);
@@ -595,7 +595,7 @@ vanillaSelectBox.prototype.setValue = function (values) {
                                     values.push(value);
                                 }
                             }
-                        } 
+                        }
                     }
                     });
                 } else if (values === "none") {
@@ -610,7 +610,7 @@ vanillaSelectBox.prototype.setValue = function (values) {
                                     }
                                 }
                             }
-                        } 
+                        }
                     });
                 }else {
                     values = values.split(",");
@@ -724,7 +724,7 @@ vanillaSelectBox.prototype.privateSendChange = function () {
     vanillaSelectBox.prototype.disable = function () {
         let already = document.getElementById("btn-group-" + this.domSelector);
         if (already) {
-            button = already.querySelector("button")
+            button = already.querySelector("a")
 			if(button) button.classList.add("disabled");
             this.isDisabled = true;
         }
@@ -732,7 +732,7 @@ vanillaSelectBox.prototype.privateSendChange = function () {
     vanillaSelectBox.prototype.enable = function () {
         let already = document.getElementById("btn-group-" + this.domSelector);
         if (already) {
-            button = already.querySelector("button")
+            button = already.querySelector("a")
             if(button) button.classList.remove("disabled");
             this.isDisabled = false;
         }

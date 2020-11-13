@@ -72,7 +72,7 @@ li.disabled{
 	background-color: #999;
 }
 
-.vsb-main button{
+.vsb-main a{
 	min-width: 120px;
 	border-radius: 0;
 	width: 100%;
@@ -84,9 +84,11 @@ li.disabled{
 	line-height:20px;
 	font-size:14px;
 	padding:6px 12px;
+	text-decoration: none;
+	display: block;
 }
 
-.vsb-main button.disabled{
+.vsb-main a.disabled{
 	cursor:not-allowed;
 	opacity:0.65;
 }
