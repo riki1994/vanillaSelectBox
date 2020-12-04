@@ -63,7 +63,7 @@
 	padding-bottom:3px;
 	color: #333;
 	cursor:pointer;
-	overflow-y:auto;
+	overflow-y:scroll;
 }
 
 li.disabled{
