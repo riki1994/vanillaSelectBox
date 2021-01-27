@@ -636,6 +636,11 @@ vanillaSelectBox.prototype.privateSendChange = function () {
             VSBoxCounter.remove(this.instanceOffset);
             already.remove();
             this.root.style.display = "inline-block";
+            if (!this.userOptions.disableSelectAll
+                && this.root.hasChildNodes()
+            ) {
+                this.root.childNodes[0].remove();
+            }
         }
     }
     vanillaSelectBox.prototype.disable = function () {
