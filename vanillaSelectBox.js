@@ -637,6 +637,7 @@ vanillaSelectBox.prototype.privateSendChange = function () {
             already.remove();
             this.root.style.display = "inline-block";
             if (!this.userOptions.disableSelectAll
+                && this.isMultiple
                 && this.root.hasChildNodes()
             ) {
                 this.root.childNodes[0].remove();
