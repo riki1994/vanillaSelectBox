@@ -446,14 +446,32 @@ function vanillaSelectBox(domSelector, options) {
                         selectAll.classList.remove('disabled');
                     }
                     if( nrChecked !== nrFound){
-                        selectAll.classList.remove("active");
+                        selectAll.classList.remove('active');
                         selectAll.innerText = self.userOptions.translations.selectAll;
                         selectAll.setAttribute('data-selected', 'false')
                     }else{
-                        selectAll.classList.add("active");
+                        selectAll.classList.add('active');
                         selectAll.innerText = self.userOptions.translations.clearAll;
                         selectAll.setAttribute('data-selected', 'true')
                     }
+                }
+                if (self.optionNodesByGroup) {
+                    self.optionNodesByGroup.forEach(function(optGroup) {
+                        let hideOptGroup = true;
+                        let childrenOptions = optGroup.childrenOptions;
+                        for (let i = 0; i < childrenOptions.length; i++) {
+                            if (!childrenOptions[i].classList.contains('hidden-search')) {
+                                hideOptGroup = false;
+                                break;
+                            }
+                        }
+                        let groupNameLi = optGroup.groupNameLi;
+                        if (hideOptGroup) {
+                            groupNameLi.classList.add('hidden-search');
+                        } else {
+                            groupNameLi.classList.remove('hidden-search');
+                        }
+                    })
                 }
             });
         }
@@ -492,7 +510,7 @@ function vanillaSelectBox(domSelector, options) {
             let choiceText = e.target.getAttribute('data-text');
             let className = e.target.getAttribute('class');
 
-            if(className &&className.indexOf("disabled") != -1){
+            if(className &&className.indexOf('disabled') != -1){
                 return;
             }
 
@@ -659,12 +677,12 @@ vanillaSelectBox.prototype.checkUncheckAll = function () {
         if(checkAllElement ){
          if(nrChecked === nrCheckable){
                 // check the checkAll checkbox
-                checkAllElement.classList.add("active");
+                checkAllElement.classList.add('active');
                 checkAllElement.innerText = self.userOptions.translations.clearAll;
                 checkAllElement.setAttribute('data-selected', 'true')
             }else if(nrChecked === 0){
                 // uncheck the checkAll checkbox
-                checkAllElement.classList.remove("active");
+                checkAllElement.classList.remove('active');
                 checkAllElement.innerText = self.userOptions.translations.selectAll;
                 checkAllElement.setAttribute('data-selected', 'false')
             }
@@ -675,12 +693,12 @@ vanillaSelectBox.prototype.checkUncheckAll = function () {
 
 vanillaSelectBox.prototype.setValue = function (values) {
     let self = this;
-    if (values == null || values == undefined || values == "") {
+    if (values == null || values == undefined || values == '') {
         self.empty();
     } else {
         if (self.isMultiple) {
-            if (vanillaSelectBox_type(values) == "string") {
-                if (values === "all") {
+            if (vanillaSelectBox_type(values) == 'string') {
+                if (values === 'all') {
                     values = [];
                     Array.prototype.slice.call(self.listElements).forEach(function (x) {
                         if (x.hasAttribute('data-value')){
@@ -698,7 +716,7 @@ vanillaSelectBox.prototype.setValue = function (values) {
                         }
                     }
                     });
-                } else if (values === "none") {
+                } else if (values === 'none') {
                     values = [];
                     Array.prototype.slice.call(self.listElements).forEach(function (x) {
                         if (x.hasAttribute('data-value')){
@@ -713,11 +731,11 @@ vanillaSelectBox.prototype.setValue = function (values) {
                         }
                     });
                 }else {
-                    values = values.split(",");
+                    values = values.split(',');
                 }
             }
             let foundValues = [];
-            if (vanillaSelectBox_type(values) == "array") {
+            if (vanillaSelectBox_type(values) == 'array') {
                 Array.prototype.slice.call(self.options).forEach(function (x) {
                     if (values.indexOf(x.value) !== -1) {
                         x.selected = true;
@@ -726,28 +744,28 @@ vanillaSelectBox.prototype.setValue = function (values) {
                         x.selected = false;
                     }
                 });
-                let selectedTexts = ""
-                let sep = "";
+                let selectedTexts = ''
+                let sep = '';
                 let nrActives = 0;
                 let nrAll = 0;
                 Array.prototype.slice.call(self.listElements).forEach(function (x) {
                     nrAll++;
-                    if (foundValues.indexOf(x.getAttribute("data-value")) != -1) {
-                        x.classList.add("active");
+                    if (foundValues.indexOf(x.getAttribute('data-value')) != -1) {
+                        x.classList.add('active');
                         nrActives++;
-                        selectedTexts += sep + x.getAttribute("data-text");
-                        sep = ",";
+                        selectedTexts += sep + x.getAttribute('data-text');
+                        sep = ',';
                     } else {
-                        x.classList.remove("active");
+                        x.classList.remove('active');
                     }
                 });
                 if (nrAll == nrActives) {
-                    let wordForAll = self.userOptions.translations.all || "all";
+                    let wordForAll = self.userOptions.translations.all || 'all';
                     selectedTexts = wordForAll;
                 } else if (self.multipleSize != -1) {
                     if (nrActives > self.multipleSize) {
-                        let wordForItems = self.userOptions.translations.items || "items"
-                        selectedTexts = nrActives + " " + wordForItems;
+                        let wordForItems = self.userOptions.translations.items || 'items'
+                        selectedTexts = nrActives + ' ' + wordForItems;
                     }
                 }
                 self.title.textContent = selectedTexts;
@@ -756,35 +774,35 @@ vanillaSelectBox.prototype.setValue = function (values) {
             self.checkUncheckAll();
         } else {
             let found = false;
-            let text = "";
-            let classNames = ""
+            let text = '';
+            let classNames = ''
             Array.prototype.slice.call(self.listElements).forEach(function (x) {
-                if (x.getAttribute("data-value") == values) {
-                    x.classList.add("active");
+                if (x.getAttribute('data-value') == values) {
+                    x.classList.add('active');
                     found = true;
-                    text = x.getAttribute("data-text")
+                    text = x.getAttribute('data-text')
                 } else {
-                    x.classList.remove("active");
+                    x.classList.remove('active');
                 }
             });
             Array.prototype.slice.call(self.options).forEach(function (x) {
                 if (x.value == values) {
                     x.selected = true;
-                    className = x.getAttribute("class");
-                    if (!className) className = "";
+                    className = x.getAttribute('class');
+                    if (!className) className = '';
                 } else {
                     x.selected = false;
                 }
             });
             if (found) {
                 self.title.textContent = text;
-                if (self.userOptions.placeHolder != "" && self.title.textContent == "") {
+                if (self.userOptions.placeHolder != '' && self.title.textContent == '') {
                     self.title.textContent = self.userOptions.placeHolder;
                 }
-                if (className != "") {
-                    self.title.setAttribute("class", className + " title");
+                if (className != '') {
+                    self.title.setAttribute('class', className + ' title');
                 } else {
-                    self.title.setAttribute("class", "title");
+                    self.title.setAttribute('class', 'title');
                 }
             }
         }
@@ -817,7 +835,13 @@ vanillaSelectBox.prototype.privateSendChange = function () {
         if (already) {
             VSBoxCounter.remove(this.instanceOffset);
             already.remove();
-            this.root.style.display = 'inline-block';
+            this.root.style.display = "inline-block";
+            if (!this.userOptions.disableSelectAll
+                && this.isMultiple
+                && this.root.hasChildNodes()
+            ) {
+                this.root.childNodes[0].remove();
+            }
         }
     }
     vanillaSelectBox.prototype.disable = function () {
