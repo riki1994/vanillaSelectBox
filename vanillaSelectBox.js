@@ -426,6 +426,7 @@ function vanillaSelectBox(domSelector, options) {
                         }
                     });
                 }
+                let hasGroupMatched = false
                 if (self.optionNodesByGroup) {
                     self.optionNodesByGroup.forEach(function (optGroup) {
                         let hideOptGroup = true;
@@ -444,13 +445,27 @@ function vanillaSelectBox(domSelector, options) {
                         }
                     })
                 }
+                if (self.listGroups && self.userOptions.searchGroups) {
+                    Array.prototype.slice.call(self.listGroups).forEach(function (x) {
+                        let text = x.innerText.toUpperCase();
+                        if (text.indexOf(searchValue) !== -1) {
+                            hasGroupMatched = true
+                            x.classList.remove('hidden-search')
+                            Array.prototype.slice.call(self.listElements).forEach(function (child) {
+                                if (child.getAttribute('data-group') === x.innerText) {
+                                    child.classList.remove('hidden-search')
+                                }
+                            });
+                        }
+                    });
+                }
                 if(selectAll){
-                    if(nrFound === 0){
+                    if(nrFound === 0 && !hasGroupMatched){
                         selectAll.classList.add('disabled');
                     }else{
                         selectAll.classList.remove('disabled');
                     }
-                    if( nrChecked !== nrFound){
+                    if( nrChecked !== nrFound || hasGroupMatched){
                         selectAll.classList.remove('active');
                         selectAll.innerText = self.userOptions.translations.selectAll;
                         selectAll.setAttribute('data-selected', 'false')
@@ -460,19 +475,6 @@ function vanillaSelectBox(domSelector, options) {
                         selectAll.setAttribute('data-selected', 'true')
                     }
                 }
-              if (self.listGroups && self.userOptions.searchGroups) {
-                Array.prototype.slice.call(self.listGroups).forEach(function (x) {
-                  let text = x.innerText.toUpperCase();
-                  if (text.indexOf(searchValue) !== -1) {
-                    x.classList.remove('hidden-search')
-                    Array.prototype.slice.call(self.listElements).forEach(function (child) {
-                      if (child.getAttribute('data-group') === x.innerText) {
-                          child.classList.remove('hidden-search')
-                      }
-                    });
-                  }
-                });
-              }
             });
         }
 
