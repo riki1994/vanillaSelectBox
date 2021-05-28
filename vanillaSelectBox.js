@@ -113,6 +113,9 @@ function vanillaSelectBox(domSelector, options) {
         if (options.disableSelectAll != undefined) {
             this.userOptions.disableSelectAll = options.disableSelectAll;
         }
+        if (options.searchGroups != undefined) {
+            this.userOptions.searchGroups = options.searchGroups;
+        }
     }
 
     this.closeOrder=function(){
