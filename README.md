@@ -1,8 +1,15 @@
-# vanillaSelectBox
+
+# vanillaSelectBox v 0.59
 ### A nice select/multiselect ui with no dependency
 
-# WIP : 
-### vanillaSelectBox is not currently in v1+, please test it carefully before using it in production (interactions with other plugins, css) and be kind enough to report any bug to me so I can improve it.
+### New : you can use the discussions page to help me improve this little tool or even suggest other plugins
+
+### vanillaSelectBox is not currently in v1+, please test it carefully before using it in production (interactions with other plugins, css) and be kind enough to report any bug to me so I can improve it. 
+
+I think one improvement would be to integrate the css as style tags because there are still css interferences between the document and vanillaSelectBox
+
+What do you think ?
+
 
 ![screen shot](https://raw.githubusercontent.com/PhilippeMarcMeyer/vanillaSelectBox/master/vanillaSelectBox.png)
 
@@ -19,8 +26,9 @@ let selectBox = new vanillaSelectBox("#brands",{"maxHeight":200,search:true});
 
 ### Available options : 
 * maxWidth : for the UI if you don't want the title to expand to much to the right
+* minWidth : for the UI if you don't want the title to be to narrow (combining both, you've got a fixed width)
 * maxHeight : the maxHeight set a scroll when there are too many items 
-* translations : { "all": "All", "items": "items","selectAll":"Select All","clearAll":"Clear All"}
+* translations : { "all": "Tous", "items": "éléments","selectAll":"Tout sélectionner","clearAll":"Effacer"}
 * search : true/false, to provide a search input text to reduce the list
 * placeHolder : well that's a placeholder !
 * stayOpen : true/false. defaut is false : that's a drop-down. Set it to true and that"s a list (>= v 0.25)
@@ -36,6 +44,11 @@ let selectBox = new vanillaSelectBox("#brands",{"maxHeight":200,search:true});
 ```
 <select id="brands" multiple size="3">
 ```
+#### Result :
+
+![screen shot](https://raw.githubusercontent.com/PhilippeMarcMeyer/vanillaSelectBox/master/sizeMatters.png)
+
+
 ### Available commands :
 * empty()
 * setValue([] || '' || 'all') => the multiple uses an array of values or a comma separated string or the string 'all'
@@ -48,7 +61,25 @@ let selectBox = new vanillaSelectBox("#brands",{"maxHeight":200,search:true});
 selectBox = new vanillaSelectBox("#brandsOne", { "maxHeight": 200, "search": true, "placeHolder": "Choose a brand..." });
 selectBox.disableItems(['Lamborghini','Land Rover']);
 ```
-#### History :
+#### History : 
+
+v0.59 : Bug fix : search box was overlapping first item in single selects
+
+v0.58 : Bug fixes
+
+v0.57 : Bug fix (minWidth option not honored)
+
+v0.56 : The multiselect checkboxes are a little smaller, maxWidth option is now working + added minWidth option as well
+        The button has now a style attribute to protect its appearance 
+
+v0.55 : All attributes from the original select options are copied to the selectBox element.
+        Excepted => "selected","disabled","data-text","data-value","style"
+        
+v0.54 : if all the options of the select are selected by the user then the check all checkbox is checked.
+
+v0.53 : if all the options of the select are selected then the check all checkbox is checked => see demo "select all test"
+
+v0.52 : Better support of select('all') => command is consistent with checkbox and selecting / deselecting while searching select / uncheck only the found items
 
 v0.51 : Translations for select all/clear all + minor css corrections + don't select disabled items
 
