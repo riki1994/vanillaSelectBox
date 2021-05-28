@@ -460,7 +460,7 @@ function vanillaSelectBox(domSelector, options) {
                         selectAll.setAttribute('data-selected', 'true')
                     }
                 }
-              if (self.listGroups && self.searchGroups) {
+              if (self.listGroups && self.userOptions.searchGroups) {
                 Array.prototype.slice.call(self.listGroups).forEach(function (x) {
                   let text = x.innerText.toUpperCase();
                   if (text.indexOf(searchValue) !== -1) {
