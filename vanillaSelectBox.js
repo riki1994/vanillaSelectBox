@@ -80,6 +80,7 @@ function vanillaSelectBox(domSelector, options) {
         placeHolder: '',
 		stayOpen:false,
         disableSelectAll: false,
+        searchGroups: false,
     }
     if (options) {
         if (options.maxWidth != undefined) {
@@ -342,6 +343,7 @@ function vanillaSelectBox(domSelector, options) {
                     self.ul.appendChild(li);
                     li.setAttribute('data-value', value);
                     li.setAttribute('data-text', text);
+                    li.setAttribute('data-group', group.label);
                     if (classes.length != 0) {
                         classes.forEach(function(x){
                             li.classList.add(x);
@@ -455,24 +457,19 @@ function vanillaSelectBox(domSelector, options) {
                         selectAll.setAttribute('data-selected', 'true')
                     }
                 }
-                if (self.optionNodesByGroup) {
-                    self.optionNodesByGroup.forEach(function(optGroup) {
-                        let hideOptGroup = true;
-                        let childrenOptions = optGroup.childrenOptions;
-                        for (let i = 0; i < childrenOptions.length; i++) {
-                            if (!childrenOptions[i].classList.contains('hidden-search')) {
-                                hideOptGroup = false;
-                                break;
-                            }
-                        }
-                        let groupNameLi = optGroup.groupNameLi;
-                        if (hideOptGroup) {
-                            groupNameLi.classList.add('hidden-search');
-                        } else {
-                            groupNameLi.classList.remove('hidden-search');
-                        }
-                    })
-                }
+              if (self.listGroups && self.searchGroups) {
+                Array.prototype.slice.call(self.listGroups).forEach(function (x) {
+                  let text = x.innerText.toUpperCase();
+                  if (text.indexOf(searchValue) !== -1) {
+                    x.classList.remove('hidden-search')
+                    Array.prototype.slice.call(self.listElements).forEach(function (child) {
+                      if (child.getAttribute('data-group') === x.innerText) {
+                          child.classList.remove('hidden-search')
+                      }
+                    });
+                  }
+                });
+              }
             });
         }
 
