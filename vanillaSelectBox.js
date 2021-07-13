@@ -72,6 +72,7 @@ function vanillaSelectBox(domSelector, options) {
     this.forbidenAttributes = ["class","selected","disabled","data-text","data-value","style"];
     this.forbidenClasses= ["active","disabled"];
     this.userOptions = {
+        disabledCriteriaValues: [],
         maxWidth: 500,
         minWidth:-1,
         maxHeight: 400,
@@ -115,6 +116,9 @@ function vanillaSelectBox(domSelector, options) {
         }
         if (options.searchGroups != undefined) {
             this.userOptions.searchGroups = options.searchGroups;
+        }
+        if (options.disabledCriteriaValues != undefined) {
+            this.userOptions.disabledCriteriaValues = options.disabledCriteriaValues;
         }
     }
 
@@ -557,7 +561,13 @@ function vanillaSelectBox(domSelector, options) {
                 let selectedTexts = ''
                 let sep = '';
                 let nrActives = 0;
-                let nrAll = 0;
+                let nrAll = 0 - self.userOptions.disabledCriteriaValues.length;
+
+                let allValues = []
+                for (let i = 0; i < self.options.length; i++) {
+                    allValues.push(self.options[i].value)
+                }
+
                 for (let i = 0; i < self.options.length; i++) {
                     nrAll++;
                     if (self.options[i].value == choiceValue) {
@@ -567,6 +577,17 @@ function vanillaSelectBox(domSelector, options) {
                         nrActives++;
                         selectedTexts += sep + self.options[i].textContent;
                         sep = ',';
+                    }
+                    if (self.options[i].selected
+                      && self.userOptions.disabledCriteriaValues.includes(self.options[i].value)
+                    ) {
+                        let opts = allValues
+                        opts.splice(i, 1)
+                        self.disableItems(opts.join(','))
+                        self.setValue(self.options[i].value)
+                        return
+                    } else {
+                        self.enableItems(allValues.join(','))
                     }
                 }
                 if (nrAll == nrActives) {
@@ -659,7 +680,7 @@ vanillaSelectBox.prototype.checkUncheckAll = function () {
     let self = this;
     if (self.isMultiple) {
         let nrChecked = 0;
-        let nrCheckable = 0;
+        let nrCheckable = 0 - self.userOptions.disabledCriteriaValues.length;
         let checkAllElement = null;
 
         Array.prototype.slice.call(self.listElements).forEach(function (x) {
@@ -705,18 +726,18 @@ vanillaSelectBox.prototype.setValue = function (values) {
                     Array.prototype.slice.call(self.listElements).forEach(function (x) {
                         if (x.hasAttribute('data-value')){
                             let value = x.getAttribute('data-value');
-                            if (value !== 'all'){
+                            if (value !== 'all' && !self.userOptions.disabledCriteriaValues.includes(value)){
                                 if(!x.classList.contains('hidden-search') && !x.classList.contains('disabled')) {
                                     values.push(x.getAttribute('data-value'));
-                            }
-                            // already checked (but hidden by search)
-                            if(x.classList.contains('active')){
-                                if(x.classList.contains('hidden-search') || x.classList.contains('disabled')){
-                                    values.push(value);
+                                }
+                                // already checked (but hidden by search)
+                                if(x.classList.contains('active') && !self.userOptions.disabledCriteriaValues.includes(value)){
+                                    if(x.classList.contains('hidden-search') || x.classList.contains('disabled')){
+                                        values.push(value);
+                                    }
                                 }
                             }
                         }
-                    }
                     });
                 } else if (values === 'none') {
                     values = [];
@@ -738,10 +759,22 @@ vanillaSelectBox.prototype.setValue = function (values) {
             }
             let foundValues = [];
             if (vanillaSelectBox_type(values) == 'array') {
+                let allValues = []
+                for (let i = 0; i < self.options.length; i++) {
+                    allValues.push(self.options[i].value)
+                }
+
                 Array.prototype.slice.call(self.options).forEach(function (x) {
                     if (values.indexOf(x.value) !== -1) {
                         x.selected = true;
                         foundValues.push(x.value);
+
+                        //disable options if a criteria is selected
+                        if (self.userOptions.disabledCriteriaValues.includes(x.value)) {
+                            let opts = allValues
+                            opts.splice(allValues.indexOf(x.value), 1)
+                            self.disableItems(opts)
+                        }
                     } else {
                         x.selected = false;
                     }
@@ -749,7 +782,7 @@ vanillaSelectBox.prototype.setValue = function (values) {
                 let selectedTexts = ''
                 let sep = '';
                 let nrActives = 0;
-                let nrAll = 0;
+                let nrAll = 0 - self.userOptions.disabledCriteriaValues.length;
                 Array.prototype.slice.call(self.listElements).forEach(function (x) {
                     nrAll++;
                     if (foundValues.indexOf(x.getAttribute('data-value')) != -1) {
