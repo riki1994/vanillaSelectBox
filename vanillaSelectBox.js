@@ -578,16 +578,16 @@ function vanillaSelectBox(domSelector, options) {
                         selectedTexts += sep + self.options[i].textContent;
                         sep = ',';
                     }
-                    if (self.options[i].selected
-                      && self.userOptions.disabledCriteriaValues.includes(self.options[i].value)
-                    ) {
-                        let opts = allValues
-                        opts.splice(i, 1)
-                        self.disableItems(opts.join(','))
-                        self.setValue(self.options[i].value)
-                        return
-                    } else {
-                        self.enableItems(allValues.join(','))
+                    if (self.userOptions.disabledCriteriaValues.includes(self.options[i].value)) {
+                        if (self.options[i].selected) {
+                            let opts = allValues
+                            opts.splice(i, 1)
+                            self.disableItems(opts.join(','))
+                            self.setValue(self.options[i].value)
+                            return
+                        } else {
+                            self.enableItems(allValues.join(','))
+                        }
                     }
                 }
                 if (nrAll == nrActives) {
