@@ -865,36 +865,40 @@ vanillaSelectBox.prototype.privateSendChange = function () {
         this.privateSendChange();
     }
 
-    vanillaSelectBox.prototype.destroy = function () {
-        let already = document.getElementById('btn-group-' + this.domSelector);
-        if (already) {
-            VSBoxCounter.remove(this.instanceOffset);
-            already.remove();
-            this.root.style.display = "inline-block";
-            if (!this.userOptions.disableSelectAll
-                && this.isMultiple
-                && this.root.hasChildNodes()
-            ) {
-                this.root.childNodes[0].remove();
+vanillaSelectBox.prototype.destroy = function () {
+    let already = document.getElementById('btn-group-' + this.domSelector);
+    if (already) {
+        VSBoxCounter.remove(this.instanceOffset);
+        already.remove();
+        this.root.style.display = "inline-block";
+        if (this.isMultiple
+          && this.root.hasChildNodes()
+        ) {
+            let allValues = []
+            for (let i = 0; i < this.options.length; i++) {
+                allValues.push(this.options[i].value)
             }
+            this.enableItems(allValues)
+            this.root.childNodes[0].remove();
         }
     }
-    vanillaSelectBox.prototype.disable = function () {
-        let already = document.getElementById('btn-group-' + this.domSelector);
-        if (already) {
-            button = already.querySelector('a')
-			if(button) button.classList.add('disabled');
-            this.isDisabled = true;
-        }
+}
+vanillaSelectBox.prototype.disable = function () {
+    let already = document.getElementById('btn-group-' + this.domSelector);
+    if (already) {
+        button = already.querySelector('a')
+        if(button) button.classList.add('disabled');
+        this.isDisabled = true;
     }
-    vanillaSelectBox.prototype.enable = function () {
-        let already = document.getElementById('btn-group-' + this.domSelector);
-        if (already) {
-            button = already.querySelector('a')
-            if(button) button.classList.remove('disabled');
-            this.isDisabled = false;
-        }
+}
+vanillaSelectBox.prototype.enable = function () {
+    let already = document.getElementById('btn-group-' + this.domSelector);
+    if (already) {
+        button = already.querySelector('a')
+        if(button) button.classList.remove('disabled');
+        this.isDisabled = false;
     }
+}
 
 vanillaSelectBox.prototype.showOptions = function(){
     console.log(this.userOptions);
