@@ -183,7 +183,7 @@
 	</p>
 
 	<div class="demo-zone" style="text-align:left;" id="demo-single">
-		<label>Choose a brand in list : </label><select id="brandsOne"></select> 
+		<label>Choose a brand in list : </label><select id="brandsOne"></select>
 		<div class="btns-active">
 			<button class="demo" onClick="empty('brandsOne')">empty()</button>
 			<button class="demo" onClick="setValues('brandsOne','Alpine')">setValue('Alpine')</button>
@@ -201,9 +201,9 @@
 		</div>
     </div>
 
-    <div id="mini-demo-zone" class="demo-zone"> 
+    <div id="mini-demo-zone" class="demo-zone">
         <div>optgroup support : </div>
-        <div> 
+        <div>
             <label for="dino-select">Choose dinosaurs :</label>
             <select id="dino-select" multiple size="2" >
                 <optgroup label="Theropods">
@@ -226,7 +226,7 @@
                     <option>Ankylosaurus</option>
                     <option>Nodosaurus</option>
                     <option>Shamosaurus</option>
-                    <option>Tsagantegia</option>                    
+                    <option>Tsagantegia</option>
                     <option>Stegosaurus</option>
                 </optgroup>
             </select>
@@ -252,7 +252,7 @@
 			<button class="demo" onClick="init('brandsMulti')">vanillaSelectBox()</button>
 		</div>
     </div>
-    
+
     <div class="demo-zone">
         <label><b>All selected test : </b></label>
         <select id="demoShort" multiple="" size="3" style="display: inline-block;">
@@ -269,13 +269,13 @@
             <option value="Cupra" selected="true">Cupra</option>
             <option value="DACIA" selected="true">DACIA</option>
         </select>
-    
+
     </div>
     <div style="width:100%;">
         <div class="demo-zone" id="demo-stay" style="width:40%;display:inline-block;">
             <label>Stay open : </label><br/><select id="brandsMultiStay" multiple size="3"></select>
         </div>
-    
+
         <div class="demo-zone" id="demo-stay-right" style="width:50%;text-align:right;display:inline-block;">
             <label>All countries : </label><br/><select id="allCountries" multiple size="0"></select>
         </div>
@@ -384,7 +384,7 @@
             buttons = zone.querySelector(".btns-inactive");
             buttons.style.display = "none";
         } else if (id == "brandsMulti") {
-        
+
             selectBox2 = new vanillaSelectBox("#brandsMulti", {"disableSelectAll": true, "maxHeight": 200,"itemsSeparator":", ", "search": true ,"translations": { "all": "All", "items": "items","selectAll":"Check All","clearAll":"Clear All"}});
             let zone = document.getElementById("demo-multiple");
             buttons = zone.querySelector(".btns-active");
@@ -417,24 +417,24 @@
     function disableItems(id,value){
         if (id == "brandsOne" && selectBox != null) {
             selectBox.disableItems(value);
-        } 
+        }
     }
 
     function enableItems(id,value){
         if (id == "brandsOne" && selectBox != null) {
             selectBox.enableItems(value);
-        } 
+        }
     }
 
     init("brandsOne");
     init("brandsMulti");
 	init("brandsMultiStay");
     selectBoxTest = new vanillaSelectBox("#demoShort", {
-        "maxHeight": 200, 
+        "maxHeight": 200,
         "search": true ,
         "translations": { "all": "All", "items": "items","selectAll":"Check All","clearAll":"Clear All","placeHolder": "Choose a brand..."}
     });
-	
+
 let allCountries = [
 {"name": "Afghanistan", "code": "AF"},
 {"name": "Åland Islands", "code": "AX"},
@@ -689,6 +689,6 @@ for (var i = 0;i < allCountries.length;i++) {
     selectCountries.appendChild(option);
 }
 let selectBox4 = new vanillaSelectBox("#allCountries", { "maxHeight": 200, "itemsSeparator":", ","search": true,"stayOpen":true,translations: { "all": "All","item":"country", "items": "Countries" } });
-let selecDino = new vanillaSelectBox("#dino-select",{ "maxHeight": 400,"search": true,translations: { "all": "All", "items": "Dinos" } });
+let selecDino = new vanillaSelectBox("#dino-select",{ "searchGroups": true,"search": true,"maxHeight": 400,"search": true,translations: { "all": "All", "items": "Dinos" } });
         </script>
 </html>

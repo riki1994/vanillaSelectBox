@@ -65,7 +65,7 @@ li[data-parent].open:not(.hidden-search){
 	padding-bottom:3px;
 	color: #333;
 	cursor:pointer;
-	overflow-y:auto;
+	overflow-y:scroll;
 }
 
 li.disabled{
@@ -85,7 +85,7 @@ li.short{
 	text-overflow: ellipsis;
 }
 
-.vsb-main button{
+.vsb-main a{
 	min-width: 120px;
 	border-radius: 0;
 	width: 100%;
@@ -97,9 +97,11 @@ li.short{
 	line-height:20px;
 	font-size:14px;
 	padding:6px 12px;
+	text-decoration: none;
+	display: block;
 }
 
-.vsb-main button.disabled{
+.vsb-main a.disabled{
 	cursor:not-allowed;
 	opacity:0.65;
 }
@@ -176,8 +178,7 @@ li.short{
 	font-size: inherit;
 	color: #333;
 	float:left;
-	margin-left:0px;
-	display: inline-block;
+	margin-left:0;
 	transform: rotate(45deg);
 	height: 8px;
 	width:  5px;
@@ -210,6 +211,7 @@ li.short{
 }
 
 .vsb-menu .multi li.grouped-option {
+	font-weight: bold;
 	font-size: 15px;
 	padding-left: 5px;
 }
@@ -243,7 +245,6 @@ li.short{
 	color: #333;
 	float:left;
 	margin-left:-18px;
-	display: inline-block;
 	transform: rotate(45deg);
 	margin-top:1px;
 	height: 8px;
