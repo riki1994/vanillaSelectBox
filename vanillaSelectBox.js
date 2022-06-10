@@ -194,14 +194,14 @@ function vanillaSelectBox(domSelector, options) {
     this.closeOrder = function () {
         let self = this;
         if (!self.userOptions.stayOpen) {
+            self.drop.style.display = "none";
             self.drop.style.visibility = "hidden";
-            if (self.search) {
-                self.inputBox.value = '';
-                Array.prototype.slice.call(self.listElements).forEach(function (x) {
-                    x.classList.remove('hide');
-                });
+            if(self.search){
+                resetStateOnClose(self);
             }
         }
+        window.removeEventListener('mousewheel', self.handleScroll);
+        window.removeEventListener('mousedown', self.handleMouseDown);
     }
 
     this.getCssArray = function (selector) {
@@ -265,6 +265,13 @@ function vanillaSelectBox(domSelector, options) {
 
         this.rootToken = self.domSelector.replace(/[^A-Za-z0-9]+/, "")
         this.root.style.display = 'none';
+        let holder =
+            document.querySelector('.vanilla-select-box-drop-down-container');
+        if (!holder) {
+            holder = document.createElement('div');
+            holder.classList.add('vanilla-select-box-drop-down-container');
+            document.body.appendChild(holder);
+        }
         let already = document.getElementById('btn-group-' + this.rootToken);
         if (already) {
             already.remove();
@@ -273,7 +280,6 @@ function vanillaSelectBox(domSelector, options) {
         this.root.parentNode.insertBefore(this.main, this.root.nextSibling);
         this.main.classList.add('vsb-main');
         this.main.setAttribute('id', 'btn-group-' + this.rootToken);
-        this.main.style.marginLeft = this.main.style.marginLeft;
         if (self.userOptions.stayOpen) {
             this.main.style.minHeight = (this.userOptions.maxHeight + 10) + 'px';
         }
@@ -306,7 +312,9 @@ function vanillaSelectBox(domSelector, options) {
             caret.style.marginTop = '8px';
         }
 
-        if (self.userOptions.stayOpen) {
+        const stayOpen = self.userOptions.stayOpen;
+
+        if (stayOpen) {
             caret.style.display = 'none';
             this.title.style.paddingLeft = '20px';
             this.title.style.fontStyle = 'italic';
@@ -314,9 +322,14 @@ function vanillaSelectBox(domSelector, options) {
         }
 
         this.drop = document.createElement('div');
-        this.main.appendChild(this.drop);
         this.drop.classList.add('vsb-menu');
         this.drop.style.zIndex = 2000 - this.instanceOffset;
+        if (stayOpen) {
+            this.main.appendChild(this.drop);
+        } else {
+            this.drop.style.display = 'none'
+            holder.appendChild(this.drop);
+        }
         this.ul = document.createElement('ul');
         this.drop.appendChild(this.ul);
 
@@ -618,13 +631,16 @@ function vanillaSelectBox(domSelector, options) {
                         }
                     }
                 }
+                if (!self.userOptions.stayOpen) {
+                    self.calculatePosition();
+                }
             });
         }
 
         if (self.userOptions.stayOpen) {
             self.drop.style.visibility = "visible";
             self.drop.style.boxShadow = "none";
-            self.drop.style.minHeight = (this.userOptions.maxHeight + 10) + "px";
+            self.drop.style.minHeight =  (this.userOptions.maxHeight+10) + "px";
             self.drop.style.position = "relative";
             self.drop.style.left = "0px";
             self.drop.style.top = "0px";
@@ -632,7 +648,11 @@ function vanillaSelectBox(domSelector, options) {
         } else {
             this.main.addEventListener('click', function (e) {
                 if (self.isDisabled) return;
+                self.drop.style.display = "block";
                 self.drop.style.visibility = "visible";
+                self.calculatePosition();
+                window.addEventListener('mousewheel', self.handleScroll);
+                window.addEventListener('mousedown', self.handleMouseDown);
                 document.addEventListener("click", docListener);
                 e.preventDefault();
                 e.stopPropagation();
@@ -762,24 +782,62 @@ function vanillaSelectBox(domSelector, options) {
                 self.title.textContent = self.userOptions.placeHolder;
             }
         });
-        function docListener() {
-            document.removeEventListener("click", docListener);
-            self.drop.style.visibility = "hidden";
-            if (self.search) {
-                self.inputBox.value = "";
-                Array.prototype.slice.call(self.listElements).forEach(function (x) {
-                    x.classList.remove('hidden-search');
-                });
-                if (self.listGroups) {
-                    Array.prototype.slice.call(self.listGroups).forEach(function (x) {
-                        x.classList.remove('hidden-search');
-                    });
+        function docListener(e) {
+            const target = e.target;
+            const isOutside = !e.target
+                || (!self.drop.contains(target) && !self.main.contains(target))
+            const clickedSimpleOption = !isOutside
+                && !self.isMultiple
+                && target.tagName === 'LI'
+            if (isOutside || clickedSimpleOption) {
+                document.removeEventListener("click", docListener);
+                self.drop.style.display = "none";
+                self.drop.style.visibility = "hidden";
+                if (self.search) {
+                    resetStateOnClose(self);
                 }
+            }
+        }
+
+        this.handleScroll = function(e) {
+            const target = e.target;
+            if (!e.target || (!self.ul.contains(target) || target.type === 'text')) {
+                self.closeOrder();
+            }
+        }
+        this.handleMouseDown = function(e) {
+            const target = e.target;
+            if (!e.target || (!self.drop.contains(target) && !self.main.contains(target))) {
+                self.closeOrder();
             }
         }
     }
     this.init();
     this.checkUncheckAll();
+}
+
+vanillaSelectBox.prototype.calculatePosition = function() {
+    const self = this
+    const { clientHeight } = self.main;
+    const { clientWidth } = self.button;
+    const { top, left } = self.main.getBoundingClientRect();
+    const { offsetHeight, offsetWidth }  = self.drop;
+    const { innerHeight, scrollY, innerWidth, scrollX } = window;
+    const windowBottom = innerHeight + scrollY;
+    const windowRight = innerWidth + scrollX;
+    const hasSpaceBelow = (top + clientHeight + offsetHeight) < windowBottom;
+    if (!hasSpaceBelow) {
+        self.drop.classList.add('open-to-top')
+    } else {
+        self.drop.classList.remove('open-to-top')
+    }
+    const hasSpaceRight = (left + offsetWidth) < windowRight;
+    const actualTop = top + scrollY;
+    const actualLeft = left + scrollX;
+    const topPosition = hasSpaceBelow ? actualTop + clientHeight : actualTop - offsetHeight;
+    const leftPosition = hasSpaceRight ? actualLeft : (actualLeft + clientWidth) - offsetWidth;
+    self.drop.style.top = `${topPosition}px`
+    self.drop.style.left = `${leftPosition}px`
 }
 
 vanillaSelectBox.prototype.buildSelect = function (data) {
@@ -1451,4 +1509,33 @@ function vanillaSelectBox_type(target) {
     const stripped = computedType.replace('[object ', '').replace(']', '');
     const lowercased = stripped.toLowerCase();
     return lowercased;
+}
+
+function resetStateOnClose(self) {
+    self.inputBox.value = "";
+    let totalElements = self.listElements.length;
+    let checkedElements = 0;
+    let checkAllElement = null;
+    Array.prototype.slice.call(self.listElements).forEach(function (x) {
+        if (x.getAttribute('data-value') === 'all' && totalElements === self.listElements.length) {
+            totalElements -=1;
+            x.classList.remove('disabled');
+            checkAllElement = x;
+        } else {
+            x.classList.remove('hidden-search');
+            if (x.classList.contains('active')) {
+                checkedElements++;
+            }
+        }
+    });
+    if (totalElements !== checkedElements && checkAllElement) {
+        checkAllElement.classList.remove("active");
+        checkAllElement.innerText = self.userOptions.translations.selectAll;
+        checkAllElement.setAttribute('data-selected', 'false')
+    }
+    if (self.listGroups) {
+        Array.prototype.slice.call(self.listGroups).forEach(function (x) {
+            x.classList.remove('hidden-search');
+        });
+    }
 }
