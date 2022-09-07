@@ -263,7 +263,7 @@ function vanillaSelectBox(domSelector, options) {
 
     this.createTree = function () {
 
-        this.rootToken = self.domSelector.replace(/[^A-Za-z0-9]+/, "")
+        this.rootToken = self.domSelector.replace(/[^A-Za-z0-9\-]+/, "")
         this.root.style.display = 'none';
         let holder =
             document.querySelector('.vanilla-select-box-drop-down-container');
