@@ -335,7 +335,7 @@ function vanillaSelectBox(domSelector, options) {
 
         this.ul.style.maxHeight = this.userOptions.maxHeight + 'px';
         this.ul.style.minWidth = this.ulminWidth + 'px';
-        this.ul.style.maxWidth = this.ulmaxWidth + "px";
+        
         this.ul.style.minHeight = this.ulminHeight + 'px';
         if (this.isMultiple) {
             this.ul.classList.add('multi');

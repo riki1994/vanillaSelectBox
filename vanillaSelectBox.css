@@ -140,8 +140,8 @@ li.short{
     display: inline-block;
     font-size: inherit;
     margin-top:-2px;
-    height: 8px;
-    width:  8px;
+    height: 11px;
+    width:  11px;
     transform: translate(-38px) rotate(45deg);
     border-bottom:  3px solid black;
     border-right:  3px solid black;
@@ -151,8 +151,8 @@ li.short{
 .vsb-menu li.grouped-option.closed span {
     display: inline-block;
     font-size: inherit;
-    height: 8px;
-    width:  8px;
+    height: 11px;
+    width:  11px;
     transform: translate(-38px) rotate(-45deg);
     border-bottom:  3px solid black;
     border-right:  3px solid black;
@@ -166,8 +166,8 @@ li.short{
     font-weight:bold;
     margin-left:22px;
     margin-right:2px;
-    height: 11px;
-    width:  8px;
+    height: 16px;
+    width:  17px;
     border : 1px solid;
     border-radius : 3px;
     padding: 1px 3px 2px 3px;
@@ -183,8 +183,8 @@ li.short{
     float:left;
     margin-left:0;
     transform: rotate(45deg);
-    height: 8px;
-    width:  5px;
+    height: 10px;
+    width:  7px;
     border-bottom: 3px solid black;
     border-right:  3px solid black;
 }
@@ -250,8 +250,8 @@ li.short{
     margin-left:-18px;
     transform: rotate(45deg);
     margin-top:1px;
-    height: 8px;
-    width:  5px;
+    height: 10px;
+    width:  7px;
     border-bottom: 3px solid black;
     border-right:  3px solid black;
 }
