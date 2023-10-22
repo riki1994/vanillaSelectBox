@@ -879,7 +879,9 @@ vanillaSelectBox.prototype.destroy = function () {
                 allValues.push(this.options[i].value)
             }
             this.enableItems(allValues)
-            this.root.childNodes[0].remove();
+            if (!this.userOptions.disableSelectAll) {
+                this.root.childNodes[0].remove();
+            }
         }
     }
 }
